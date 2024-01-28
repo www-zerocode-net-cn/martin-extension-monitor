@@ -1,0 +1,51 @@
+server:
+  port: 9601
+
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: @profiles.active@
+  # 配置中心
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS-HOST:martin-cloud-nacos}:${NACOS-PORT:8848}
+        namespace: @profiles.active@
+      config:
+        namespace: ${spring.profiles.active}
+        group: ${spring.profiles.active}_group
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: ${file-extension}
+        extension-configs:
+          - data-id: application-${spring.profiles.active}.${file-extension}
+            group: ${spring.profiles.active}_group
+            refresh: true
+        shared-configs:
+          - data-id: application.${file-extension}
+            group: ${spring.profiles.active}_group
+            refresh: true
+
+
+
+  redis:
+    #redis数据库，默认是0
+    database: 0
+    #redis服务器地址
+    host: 127.0.0.1
+    #redis服务端口，默认6379
+    port: 6379
+    #redis密码，默认为空
+    password:
+
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+
+
+  resources:
+      static-locations:
+        - templates
+        - static
+  mvc:
+    static-path-pattern: /**
